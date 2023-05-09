@@ -1,7 +1,10 @@
 import java.util.Scanner;
-
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
 public class Interface {
     private LogIn LoggedInAccount = new LogIn();
+
     public void Display(){
         System.out.println("Welcome to Toffee Online Store :)");
         int choice =1;
@@ -11,7 +14,7 @@ public class Interface {
         while(choice != 0){
             Scanner input = new Scanner (System.in);
             if(registeredUser){
-
+                System.out.println("Good to see You "+ LoggedInAccount.getUserName() + " :)");
                 System.out.println("""
                 Please enter a valid option from the list below:
                 1. LogOut
@@ -80,9 +83,33 @@ public class Interface {
         return phoneNumber.matches(validNumber);    //Compare the phone number to the valid phone number.
     }
 
-    public static boolean CheckLogin(String UserName, String password){
-        return true; // a dummy return to be implemented "check"
-    }
+    public static boolean CheckLogin(String userName, String password) {
+            String csvFilePath = "students.csv";
+            try {
+                FileReader fileReader = new FileReader(csvFilePath);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    String[] data = line.split(",");
+                    String csvUserName = data[0];
+                    String csvPassword = data[1];
+
+                    if (csvUserName.equals(userName) && csvPassword.equals(password)) {
+                        bufferedReader.close();
+                        return true; // Found a matching userName and password
+                    }
+                }
+
+                bufferedReader.close();
+            } catch (IOException e) {
+                System.out.println("An error occurred while reading the CSV file.");
+                e.printStackTrace();
+            }
+
+            return false; // No matching userName and password found
+        }
+
     public static boolean FindUserName(String UserName){
         return true; // a dummy return to be implemented "check"
     }
@@ -155,7 +182,7 @@ public class Interface {
         System.out.println("Enter your Address:\t");
         address = input1.nextLine();    //gets the address from the user.
         Register NewAccount = new Register (userName,password,firstName,lastName,email,address,phoneNumber);
-        LoggedInAccount = new LogIn (userName,password);
+        LoggedInAccount = new LogIn (userName);
     }
     public void Login()
     {
@@ -174,7 +201,7 @@ public class Interface {
             System.out.println("Invalid password!!! please enter a valid password for " + userName + " account :\t");
             password = input1.next(); //gets the password from the user.
         }
-        LoggedInAccount = new LogIn(userName, password);
+        LoggedInAccount = new LogIn (userName);
     }
     public void Logout(){
         System.out.println("It's sorry to see out :(");
@@ -185,6 +212,5 @@ public class Interface {
     public void Cart(){
         Cart myCart = new Cart(LoggedInAccount.getUserName());
         myCart.DisplayCart();
-
     }
 }
