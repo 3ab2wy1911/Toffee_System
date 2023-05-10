@@ -14,7 +14,7 @@ public class LogIn {
     }
 
     public void retrieveData() {
-        String csvFilePath = "students.csv";
+        String csvFilePath = "customers.csv";
 
         try {
             FileReader fileReader = new FileReader(csvFilePath);

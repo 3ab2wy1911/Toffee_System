@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 public class Interface {
     private LogIn LoggedInAccount = new LogIn();
+    private Cart myCart= new Cart();
 
     public void Display(){
         System.out.println("Welcome to Toffee Online Store :)");
@@ -33,6 +34,7 @@ public class Interface {
                         registeredUser = false;
                     }
                     case 2 -> Catalog();
+
                     case 3 -> Cart();
                 }
             }
@@ -60,7 +62,7 @@ public class Interface {
                         registeredUser = true;
 
                     }
-                    case 3 -> Catalog();
+                    case 3 -> Catalog.DisplayMenu();
                 }
 
             }
@@ -75,7 +77,29 @@ public class Interface {
     }
 
     public boolean UniqueUserName (String userName){
-        return true;  // a dummy return to be implemented "check the username occurrence in the file"
+        String csvFilePath = "customers.csv";
+
+        try {
+            FileReader fileReader = new FileReader(csvFilePath);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] data = line.split(",");
+                String csvUserName = data[0];
+                if (userName.equals(csvUserName))
+                {
+                    return false;
+                }
+            }
+
+            bufferedReader.close(); //// Close the reader.
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred while reading the CSV file.");
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public static boolean checkPhoneNumber(String phoneNumber){
@@ -84,7 +108,7 @@ public class Interface {
     }
 
     public static boolean CheckLogin(String userName, String password) {
-            String csvFilePath = "students.csv";
+            String csvFilePath = "customers.csv";
             try {
                 FileReader fileReader = new FileReader(csvFilePath);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -101,8 +125,8 @@ public class Interface {
                     }
                 }
 
-                bufferedReader.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 System.out.println("An error occurred while reading the CSV file.");
                 e.printStackTrace();
             }
@@ -113,6 +137,17 @@ public class Interface {
     public static boolean FindUserName(String UserName){
         return true; // a dummy return to be implemented "check"
     }
+
+    public static boolean CheckName(String Name){
+        String validName = "^[a-zA-Z']+$";
+        return (!Name.matches(validName));
+    }
+    public static boolean CheckEmail(String email){
+        String validEmail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+
+        return(email.matches(validEmail));
+    }
+
     public void Register()
     {
         Scanner input1 = new Scanner (System.in);
@@ -122,22 +157,32 @@ public class Interface {
         userName = input1.next();   // gets the username.
         while(!UniqueUserName(userName)){
             System.out.println("User name is already taken by another user, enter another user name:\t");
-            userName="input1.next()";   // Checks that the username is unique.
+            userName=input1.next();   // Checks that the username is unique.
         }
 
 
         System.out.print("Enter First Name:\t");
-        firstName = input1.nextLine();  //gets the first name from the user.
-
         input1.nextLine();  // Consume the newline character left in the buffer
 
+        firstName = input1.nextLine();  //gets the first name from the user.
+        while(CheckName(firstName)){
+            System.out.println("Enter a valid name:\t");
+            firstName = input1.nextLine(); //gets the first name from the
+        }
         System.out.println("Enter Last Name:\t");
         lastName = input1.nextLine();
+        while(CheckName(lastName)){
+            System.out.println("Enter a valid name:\t");
+            lastName = input1.nextLine(); //gets the last name from the
+        }
 
         System.out.println("Enter Email:\t");
         email = input1.next();  //function checkEmail to be added.
-
-        input1.nextLine();  // Consume the newline character left in the buffer
+        while(!CheckEmail(email))
+        {
+            System.out.println("Enter a valid email:\t");
+            email = input1.next();
+        }
 
         System.out.println("""
                 The password must contain:
@@ -181,9 +226,12 @@ public class Interface {
 
         System.out.println("Enter your Address:\t");
         address = input1.nextLine();    //gets the address from the user.
-        Register NewAccount = new Register (userName,password,firstName,lastName,email,address,phoneNumber);
+        new Register(userName, password, firstName, lastName, email, address, phoneNumber);
         LoggedInAccount = new LogIn (userName);
+        myCart = new Cart(LoggedInAccount.getUserName());
     }
+
+
     public void Login()
     {
         Scanner input1 = new Scanner (System.in);
@@ -202,15 +250,66 @@ public class Interface {
             password = input1.next(); //gets the password from the user.
         }
         LoggedInAccount = new LogIn (userName);
+        myCart = new Cart(LoggedInAccount.getUserName());
     }
     public void Logout(){
         System.out.println("It's sorry to see out :(");
     }
     public void Catalog(){
-        Catalog.DisplayMenu();
+        int choice =1;
+        while(choice != 0 ) {
+            Scanner input = new Scanner (System.in);
+
+            Catalog.DisplayMenu();
+            System.out.println("""
+                    Please enter your choice:
+                    0. Back to the previous menu
+                    1. Add item to Your cart
+                    """);
+
+            choice = input.nextInt();
+
+            if(choice == 1){
+                int id,quantity;
+                System.out.println("Enter the ID of the item you want to add to your cart:\t");
+                id = input.nextInt();
+//                while(){
+//                    System.out.println("Couldn't find item :(");
+//                    id=input.nextInt();
+//                }
+                System.out.println("Enter the ID of the item you want to add to your cart:\t");
+                quantity = input.nextInt();
+                //                while(){
+//                    System.out.println("Not enough Quantity :(");
+//                    quantity=input.nextInt();
+//                }
+                myCart.addItem(LoggedInAccount.getUserName(),id, quantity);
+            }
+        }
     }
     public void Cart(){
-        Cart myCart = new Cart(LoggedInAccount.getUserName());
+        double totalPrice =myCart.getTotalPrice();
+        System.out.println("Your Cart Total price is: " + totalPrice);
+        Scanner input = new Scanner(System.in);
         myCart.DisplayCart();
+        System.out.println("""
+            Go to Checkout?
+            1.Yes
+            2.No
+    """);
+        int answer = input.nextInt();
+        double cash;
+        if (answer == 1){
+            System.out.println("Please enter the cash amount:\t");
+            cash = input.nextDouble();
+            if(cash == totalPrice){
+                System.out.println("Congratulations!!! The payment done successfully");
+                myCart.clearFile();
+                myCart = new Cart();
+            }
+            else {
+                System.out.println("The payment failed :(");
+            }
+        }
     }
 }

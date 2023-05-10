@@ -24,14 +24,13 @@ public class Register {
     }
 
     private void storeDataInFile() {
-        String csvFilePath = "students.csv";
+        String csvFilePath = "customers.csv";
 
         try {
             FileWriter fileWriter = new FileWriter(csvFilePath, true); // true to append data to the file
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
             String rowData = userName + "," + password + "," + firstName + "," + lastName + "," + email + "," + address + "," + phoneNumber;    // Create a string with the data separated by commas
-
             bufferedWriter.write(rowData);  // Write the data row to the CSV file
             bufferedWriter.newLine();
 
