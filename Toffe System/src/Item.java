@@ -1,8 +1,9 @@
 public class Item {
-    private int quantity, id ;
-
-    private String name , type;
-    private double price;
+    private int quantity;
+    private final int id ;
+    private final String name;
+    private final String type;
+    private final double price;
 
     public Item(int id, String name, String type , double price, int quantity)  // Parametrized constructor.
     {
@@ -13,23 +14,53 @@ public class Item {
         this.price = price;
     }
 
-    public int getId() {
+    //==================================================================================================================
+
+    public int getId() {    // return the item's id.
+
         return id;
+
     }
 
-    public String getName() {
+    //==================================================================================================================
+
+    public String getName() {   // return the item's name.
+
         return name;
+
     }
 
-    public String getType() {
+    //==================================================================================================================
+
+    public String getType() {   // return the item's type.
+
         return type;
+
     }
 
-    public double getPrice() {
+    //==================================================================================================================
+
+    public double getPrice() {  // return the item's price
+
         return price;
+
     }
 
-    public int getQuantity() {
+    //==================================================================================================================
+
+    public int getQuantity() {  // return the item's quantity.
+
         return quantity;
+
     }
+
+    //==================================================================================================================
+
+    public void setQuantity(int quantity) { // Sets the item quantity.
+
+        this.quantity -= quantity;
+
+    }
+
+    //==================================================================================================================
 }
