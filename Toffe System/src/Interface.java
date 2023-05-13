@@ -2,9 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
-//import javax.mail.*;
-//import javax.mail.internet.InternetAddress;
-//import javax.mail.internet.MimeMessage;
 
 public class Interface {
     private LogIn LoggedInAccount = new LogIn();
@@ -178,20 +175,15 @@ public class Interface {
     }
 
     //==================================================================================================================
-//    public void OTP()
-//    {
-//        Random random = new Random();
-//        int min = 100_000; // Minimum six-digit number
-//        int max = 999_999; // Maximum six-digit number
-//
-//        int randomNumber = random.nextInt(max - min + 1) + min; // generate random number that will be used as the code.
-//    }
-    // =================================================================================================================
+
 
     public void Register()
     {
         Scanner input1 = new Scanner (System.in);
         String userName , password , firstName , lastName , email , address , phoneNumber;
+
+        // code and otp that will be used in verification.
+        String code , otp=Register.OTP();
 
         System.out.print("Enter a user name:\t");
         userName = input1.next();   // gets the username.
@@ -272,13 +264,23 @@ public class Interface {
         System.out.println("Enter your Address:\t");
         address = input1.nextLine();    //gets the address from the user.
 
+        // Validate the registration of the user.
+        Register.sendEmail(email,otp);
+        code = input1.next(); //gets the code from the user.
+        while(!code.equals(otp))
+        {
+            System.out.println("Invalid code!!! Please enter a valid code:\t");
+            code=input1.next();
+        }
+
+        System.out.println("User's Registration Completed!!!");
 
         new Register(userName, password, firstName, lastName, email, address, phoneNumber); // pass the data to the constructor of the Register class to be added to the file.
         LoggedInAccount = new LogIn (userName); // Get the account of the user.
         myCart = new Cart(LoggedInAccount.getUserName());   // Get the cart of the user.
     }
 
-//======================================================================================================================
+    //==================================================================================================================
 
     public void Login()
     {

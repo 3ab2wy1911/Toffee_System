@@ -8,5 +8,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Java EE 6-Java EE 6" level="project" />
+    <orderEntry type="library" name="javax.activation-10.0-b28" level="project" />
+    <orderEntry type="library" name="javax.mail" level="project" />
+    <orderEntry type="library" name="techsoftemail" level="project" />
   </component>
 </module>
