@@ -30,7 +30,7 @@ public class LogIn {
 
                 if (csvUserName.equals(userName)) {     // Assign values to the attributes of the class
                     this.userName = csvUserName;
-                    this.password = AffineCipherD(data[1]);
+                    this.password = data[1];
                     this.firstName = data[2];
                     this.lastName = data[3];
                     this.email = data[4];
@@ -97,46 +97,6 @@ public class LogIn {
 
         return this.userName;
 
-    }
-
-// =====================================================================================================================
-
-    public static String AffineCipherD(String encryptedPassword) {
-        // A->0 .... Z->25
-        // 21(y -8) % 26 The decryption Equation.
-
-        StringBuilder password = new StringBuilder();
-        int z, inverse = 0;
-        for (int i = 0; i < 26; i++) {
-            z = (5 * i) % 26;
-
-            // Check if (a*i)%26 == 1,
-            // then i will be the multiplicative inverse of a
-
-            if (z == 1)
-            {
-                inverse = i;
-            }
-        }
-
-        int length =encryptedPassword.length();
-
-        for (int i = 0; i < length; i++) {
-
-            char c = Character.toUpperCase(encryptedPassword.charAt(i));  // Turn the string to UpperCase
-
-            if (c >= 'A' && c <= 'Z')
-            {
-                int y = c - 'A';
-                password.append((char) (((inverse * (y - 8)) % 26) + 'A'));
-            }
-
-            else
-            {
-                password.append(c);
-            }
-        }
-        return password.toString();
     }
 
 // =====================================================================================================================

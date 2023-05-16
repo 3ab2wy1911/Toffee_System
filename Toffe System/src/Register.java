@@ -20,7 +20,7 @@ public class Register {
     public Register(String userName , String password , String firstName , String lastName , String email , String address , String phoneNumber )
     {
         this.userName = userName;
-        this.password = AffineCipherE(password);
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -30,28 +30,6 @@ public class Register {
         storeDataInFile();  // Function to store the data in a file
     }
 
-    // =================================================================================================================
-
-    public static String AffineCipherE(String password) {
-        // A->0 .... Z->25
-        // (5x +8) % 26 The encryption Equation.
-
-        StringBuilder encryptedPassword = new StringBuilder();
-        int length =password.length();
-
-        for (int i = 0; i < length; i++) {
-            char c = Character.toUpperCase(password.charAt(i));  // Turn the string to UpperCase
-            if (c >= 'A' && c <= 'Z') {
-                int x = c - 'A';
-                encryptedPassword.append((char) (((5 * x + 8) % 26) + 'A'));
-            }
-
-            else {
-                encryptedPassword.append(c);
-            }
-        }
-        return encryptedPassword.toString();
-    }
 
     // =================================================================================================================
 

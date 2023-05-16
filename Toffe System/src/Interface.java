@@ -132,7 +132,7 @@ public class Interface {
                     String csvPassword = data[1];
                     // Get the  username and password from the CSV file.
 
-                    if (csvUserName.equals(userName) && csvPassword.equals(LogIn.AffineCipherD(password))) {
+                    if (csvUserName.equals(userName) && csvPassword.equals(password)) {
                         bufferedReader.close();
                         return true; // Found a matching userName and password
                     }
