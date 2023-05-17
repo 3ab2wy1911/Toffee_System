@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class Interface {
     private LogIn LoggedInAccount = new LogIn();
     private Cart myCart= new Cart();
-
-    public void Display(){
+//this function display the main menu
+    public void  Display(){
         System.out.println("Welcome to Toffee Online Store :)");
         int choice =1;
         boolean registeredUser = false; //Variable which will detect which menu appears for the user.
